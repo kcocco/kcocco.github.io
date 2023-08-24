@@ -1,0 +1,163 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 800px;
+                 background-color: #0E1117;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "blue", "font": {"color": "white"}, "id": "Emanuela Orlandi", "label": "Emanuela Orlandi", "shape": "dot", "size": 20, "title": "A citizen of Vatican City who mysteriously disappeared on 22 June 1983"}, {"color": "grey", "font": {"color": "white"}, "id": "Vatican", "label": "Vatican", "shape": "dot", "size": 10, "title": "The headquarters of the Roman Catholic Church"}, {"color": "blue", "font": {"color": "white"}, "id": "Gabriele Amorth", "label": "Gabriele Amorth", "shape": "dot", "size": 20, "title": "An Italian Roman Catholic priest and an exorcist of the Diocese of Rome."}, {"color": "grey", "font": {"color": "white"}, "id": "Marcello Neroni", "label": "Marcello Neroni", "shape": "dot", "size": 10, "title": "a man affiliated with De Pedis and Banda della Magliana"}, {"color": "grey", "font": {"color": "white"}, "id": "Italy", "label": "Italy", "shape": "dot", "size": 10, "title": "The country where remains were found that revived talk of Emanuela Orlandi\u0027s case"}, {"color": "blue", "font": {"color": "white"}, "id": "Giulio Gangi", "label": "Giulio Gangi", "shape": "dot", "size": 20, "title": "An agent of SISDE who participated in the initial investigations into Emanuela Orlandi\u0027s disappearance"}, {"color": "grey", "font": {"color": "white"}, "id": "mental hospital in London", "label": "mental hospital in London", "shape": "dot", "size": 10, "title": "A place where people with mental health problems are treated"}, {"color": "blue", "font": {"color": "white"}, "id": "Pietro Orlandi", "label": "Pietro Orlandi", "shape": "dot", "size": 20, "title": "brother of Emanuela Orlandi"}, {"color": "blue", "font": {"color": "white"}, "id": "Pope Francis", "label": "Pope Francis", "shape": "dot", "size": 20, "title": "the head of the Catholic Church and sovereign of the Vatican City State"}, {"color": "grey", "font": {"color": "white"}, "id": "Orlandi report", "label": "Orlandi report", "shape": "dot", "size": 10, "title": "A report about the disappearance of Emanuela Orlandi"}, {"color": "grey", "font": {"color": "white"}, "id": "a 1993 letter by the then-Archbishop of Canterbury, George Carey, to Cardinal Poletti", "label": "a 1993 letter by the then-Archbishop of Canterbury, George Carey, to Cardinal Poletti", "shape": "dot", "size": 10, "title": "a letter suggesting a personal meeting to talk about Emanuela Orlandi"}, {"color": "grey", "font": {"color": "white"}, "id": "Orlandi family", "label": "Orlandi family", "shape": "dot", "size": 10, "title": "The family of Emanuela Orlandi, a Vatican teenager who mysteriously disappeared in 1983."}, {"color": "grey", "font": {"color": "white"}, "id": "Emanuela Orlandi\u0027s disappearance", "label": "Emanuela Orlandi\u0027s disappearance", "shape": "dot", "size": 10, "title": "a case of a missing girl"}, {"color": "blue", "font": {"color": "white"}, "id": "Pope John Paul II", "label": "Pope John Paul II", "shape": "dot", "size": 20, "title": "The head of the Catholic Church and sovereign of the Vatican City State from 1978 to 2005."}, {"color": "grey", "font": {"color": "white"}, "id": "Orlandi\u0027s disappearance", "label": "Orlandi\u0027s disappearance", "shape": "dot", "size": 10, "title": "The event of Emanuela Orlandi mysteriously disappearing while returning home from music school in Rome on 22 June 1983."}, {"color": "blue", "font": {"color": "white"}, "id": "Enrico De Pedis", "label": "Enrico De Pedis", "shape": "dot", "size": 20, "title": "Leader of the Roman gang Banda della Magliana."}, {"color": "grey", "font": {"color": "white"}, "id": "Basilica di Sant\u0027Apollinare", "label": "Basilica di Sant\u0027Apollinare", "shape": "dot", "size": 10, "title": "A basilica in Rome, Italy."}, {"color": "blue", "font": {"color": "white"}, "id": "Alessandro Ambrosini", "label": "Alessandro Ambrosini", "shape": "dot", "size": 20, "title": "Italian journalist"}, {"color": "blue", "font": {"color": "white"}, "id": "Maurizio Abbatino", "label": "Maurizio Abbatino", "shape": "dot", "size": 20, "title": "a Banda boss who had turned to aiding the judicial system"}, {"color": "grey", "font": {"color": "white"}, "id": "Banda della Magliana and the Vatican", "label": "Banda della Magliana and the Vatican", "shape": "dot", "size": 10, "title": "two entities"}, {"color": "blue", "font": {"color": "white"}, "id": "Emiliano Fittipaldi", "label": "Emiliano Fittipaldi", "shape": "dot", "size": 20, "title": "Italian journalist"}, {"color": "grey", "font": {"color": "white"}, "id": "secret Vatican documents", "label": "secret Vatican documents", "shape": "dot", "size": 10, "title": "documents that had been stolen in 2014 in the Vatican leaks scandal"}, {"color": "blue", "font": {"color": "white"}, "id": "Judge Otello Lupacchini and journalist Max Parisi", "label": "Judge Otello Lupacchini and journalist Max Parisi", "shape": "dot", "size": 20, "title": "two individuals conducting a study"}, {"color": "grey", "font": {"color": "white"}, "id": "young girls missing and murdered in Rome between 1982 and 1990", "label": "young girls missing and murdered in Rome between 1982 and 1990", "shape": "dot", "size": 10, "title": "victims of a hypothesized serial killer"}, {"color": "blue", "font": {"color": "white"}, "id": "Marco Accetti", "label": "Marco Accetti", "shape": "dot", "size": 20, "title": "a photographer convicted for the death of Jose Garramon"}, {"color": "grey", "font": {"color": "white"}, "id": "Emanuela Orlandi\u0027s kidnapping", "label": "Emanuela Orlandi\u0027s kidnapping", "shape": "dot", "size": 10, "title": "an event that took place as part of an internal blackmail campaign and a feud between rival factions within the Vatican"}, {"color": "blue", "font": {"color": "white"}, "id": "The Vatican", "label": "The Vatican", "shape": "dot", "size": 20, "title": "an independent city-state enclaved within Rome, Italy"}, {"color": "grey", "font": {"color": "white"}, "id": "an \"unedited file\"", "label": "an \"unedited file\"", "shape": "dot", "size": 10, "title": "a file suggesting a possible involvement of Orlandi\u0027s uncle, Mario Meneguzzi, in the disappearance of the girl"}, {"color": "blue", "font": {"color": "white"}, "id": "Giancarlo Capaldo", "label": "Giancarlo Capaldo", "shape": "dot", "size": 20, "title": "the then-public prosecutor of Rome"}, {"color": "grey", "font": {"color": "white"}, "id": "secret negotiations", "label": "secret negotiations", "shape": "dot", "size": 10, "title": "negotiations held in the Palace of Justice between two emissaries of the Holy See and Giancarlo Capaldo"}]);
+                  edges = new vis.DataSet([{"color": "grey", "from": "Emanuela Orlandi", "label": "reopens investigation into teenager who went missing in 1983", "title": "`Vatican reopens investigation into teenager who went missing in 1983`", "to": "Vatican", "width": 3}, {"color": "red", "from": "Emanuela Orlandi", "label": "claimed", "title": "`In May 2012, exorcist Gabriele Amorth claimed that Orlandi was the victim of a group of ecclesiastical paedophiles.`", "to": "Gabriele Amorth", "width": 8}, {"color": "red", "from": "Emanuela Orlandi", "label": "implied", "title": "`On 14 December 2022, Italian journalist Alessandro Ambrosini published an exclusive recording of Marcello Neroni, a man affiliated with De Pedis and Banda della Magliana, who implied that Orlandi was made to disappear or was kidnapped by De Pedis on the request of someone inside the Vatican for the purposes of covering up a sex scandal.`", "to": "Marcello Neroni", "width": 8}, {"color": "red", "from": "Emanuela Orlandi", "label": "Remains found", "title": "`Remains Found in Italy Revive Talk of 15-Year-Old Girl\u0027s Decades-Old Cold Case`", "to": "Italy", "width": 8}, {"color": "grey", "from": "Emanuela Orlandi", "label": "Participated in the initial investigations", "title": "`Emanuela Orlandi, morto Giulio Gangi, l\u0027agente del SISDE che partecip\u00f2 alle prime indagini`", "to": "Giulio Gangi", "width": 3}, {"color": "grey", "from": "Emanuela Orlandi", "label": "is alive, she is in", "title": "`Emanuela Orlandi is alive, she is in a mental hospital in London`", "to": "mental hospital in London", "width": 3}, {"color": "red", "from": "Vatican", "label": "pressed for information", "title": "`Orlandi\u0027s family, in particular her brother Pietro, consistently pressed the Vatican for the release of information about the case, believing that the Holy See knew more than it admitted.`", "to": "Pietro Orlandi", "width": 8}, {"color": "green", "from": "Vatican", "label": "opened an official investigation", "title": "`In 2023, forty years after Orlandi\u0027s disappearance, the Vatican opened an official investigation for the first time at the behest of Pope Francis.`", "to": "Pope Francis", "width": 8}, {"color": "red", "from": "Vatican", "label": "says", "title": "`Vatican says Orlandi report \u0027false and ridiculous\u0027`", "to": "Orlandi report", "width": 8}, {"color": "grey", "from": "Pietro Orlandi", "label": "revealed that he came into possession of", "title": "`In April 2023, Pietro Orlandi revealed that he came into possession of a 1993 letter by the then-Archbishop of Canterbury, George Carey, to Cardinal Poletti.`", "to": "a 1993 letter by the then-Archbishop of Canterbury, George Carey, to Cardinal Poletti", "width": 3}, {"color": "green", "from": "Pope Francis", "label": "met", "title": "`In 2013, a few days after his election, Pope Francis met the Orlandi family after a mass and told them that \u0027Emanuela is in heaven\u0027, implying the girl\u0027s death.`", "to": "Orlandi family", "width": 8}, {"color": "red", "from": "Pope Francis", "label": "remembered the fortieth anniversary of", "title": "`On 25 June, during his Angelus address, Pope Francis remembered the fortieth anniversary of Orlandi\u0027s disappearance, \"expressing closeness to the family, above all, the mother\" and then extended the prayer to all missing persons.`", "to": "Emanuela Orlandi\u0027s disappearance", "width": 8}, {"color": "green", "from": "Pope John Paul II", "label": "issued an appeal", "title": "`During the Angelus on 3 July, Pope John Paul II issued an appeal to those responsible for Orlandi\u0027s disappearance, making the hypothesis of kidnapping official for the first time.`", "to": "Orlandi\u0027s disappearance", "width": 8}, {"color": "red", "from": "Enrico De Pedis", "label": "buried", "title": "`On 11 July 2005, an anonymous caller to the Italian television program Chi l\u0027ha visto? said that to resolve the Orlandi case, it was necessary to look who was buried in the crypt of the Basilica di Sant\u0027Apollinare, in Rome. It was discovered that the crypt contained the grave of Enrico De Pedis (1954\u20131990), leader of the Roman gang Banda della Magliana.`", "to": "Basilica di Sant\u0027Apollinare", "width": 8}, {"color": "grey", "from": "Marcello Neroni", "label": "published an exclusive recording of", "title": "`On 14 December 2022, Italian journalist Alessandro Ambrosini published an exclusive recording of Marcello Neroni, a man affiliated with De Pedis and Banda della Magliana, who implied that Orlandi was made to disappear or was kidnapped by De Pedis on the request of someone inside the Vatican for the purposes of covering up a sex scandal.`", "to": "Alessandro Ambrosini", "width": 3}, {"color": "red", "from": "Maurizio Abbatino", "label": "mentioned a presumed plot between", "title": "`A presumed plot between Banda della Magliana and the Vatican had already been mentioned back in 2009 by Maurizio Abbatino, a Banda boss who had turned to aiding the judicial system.`", "to": "Banda della Magliana and the Vatican", "width": 8}, {"color": "grey", "from": "Emiliano Fittipaldi", "label": "came into possession of", "title": "`In 2017, Italian journalist Emiliano Fittipaldi came into possession of secret Vatican documents that had been stolen in 2014 in the Vatican leaks scandal.`", "to": "secret Vatican documents", "width": 3}, {"color": "red", "from": "Judge Otello Lupacchini and journalist Max Parisi", "label": "conducted a study of", "title": "`In the 2000s, Judge Otello Lupacchini and journalist Max Parisi conducted a study of over twelve cases of young girls missing and murdered in Rome between 1982 and 1990 and hypothesized that all of them were victims of a serial killer, due to the similarities of the murders and their proximity within the city.`", "to": "young girls missing and murdered in Rome between 1982 and 1990", "width": 8}, {"color": "red", "from": "Marco Accetti", "label": "claimed to be one of the kidnappers involved in", "title": "`In 2013, Marco Accetti, a photographer convicted for the death of Jose Garramon, claimed to be one of Orlandi\u0027s kidnappers.`", "to": "Emanuela Orlandi\u0027s kidnapping", "width": 8}, {"color": "red", "from": "The Vatican", "label": "never opened an official investigation into", "title": "`Over the years, questions were raised as to why the Vatican never opened an official investigation into Orlandi\u0027s disappearance, even though she was a Vatican citizen.`", "to": "Emanuela Orlandi\u0027s disappearance", "width": 8}, {"color": "red", "from": "The Vatican", "label": "released", "title": "`On 10 July 2023, the Vatican released an \"unedited file\" to the Italian TV news program TG La7 that suggested a possible involvement of Orlandi\u0027s uncle, Mario Meneguzzi, in the disappearance of the girl.`", "to": "an \"unedited file\"", "width": 8}, {"color": "grey", "from": "Giancarlo Capaldo", "label": "held", "title": "`In 2012, years after the discovery of De Pedis\u0027 grave, secret negotiations were held in the Palace of Justice between two emissaries of the Holy See and Giancarlo Capaldo, the then-public prosecutor of Rome.`", "to": "secret negotiations", "width": 3}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "repulsion": {
+            "centralGravity": 0.2,
+            "damping": 0.09,
+            "nodeDistance": 100,
+            "springConstant": 0.05,
+            "springLength": 200
+        },
+        "solver": "repulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
